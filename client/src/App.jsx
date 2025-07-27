@@ -3,6 +3,8 @@ import UserList from './pages/UserList';
 import UserForm from './pages/UserForm';
 import Menu from './components/Menu';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+
 import { BrowserRouter,Routes,Route } from 'react-router-dom'
 import UserEditForm from "./pages/UserEditForm";
 
