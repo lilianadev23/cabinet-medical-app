@@ -66,9 +66,7 @@ export default function UserList({ users, refreshUsers }) {
                   >
                     Modifier
                   </button>
-                  <Link to="/edituser" user={{ u }}>
-                   Edit
-                  </Link>
+                 
                   <button
                     className="btn btn-danger"
                     onClick={() => handleDelete(u._id)}

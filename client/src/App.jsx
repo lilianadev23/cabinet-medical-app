@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import UserList from './components/UserList';
-import UserForm from './components/UserForm';
+import UserList from './pages/UserList';
+import UserForm from './pages/UserForm';
 import Menu from './components/Menu';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { BrowserRouter,Routes,Route } from 'react-router-dom'
-import UserEditForm from "./components/UserEditForm";
+import UserEditForm from "./pages/UserEditForm";
 
 export default function App() {
   const [users, setUsers] = useState([]);
