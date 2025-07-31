@@ -55,8 +55,9 @@ export default function UserList({ users, refreshUsers }) {
             {users.map((u) => (
               <tr key={u._id}>
                 <td>{u.nom}</td>
-                <td>{u.role}</td>
+               
                 <td>{u.email} </td>
+                <td>{u.role}</td>
                 <td>
                   {" "}
                   <button
