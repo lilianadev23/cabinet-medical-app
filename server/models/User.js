@@ -7,7 +7,6 @@ const BaseUserSchema = new Schema({
   email: { type: String, unique: true, required: true },
   motdepasse: { type: String, required: true },
   statut: { type: String, default: "actif" },
-  permission: { type: String }, 
   role: { type: String, required: true } 
 }, { discriminatorKey: 'role', timestamps: true });
 
@@ -38,7 +37,7 @@ const SecretaireFields = new Schema({
   numCompteBancaire: String,
   numCnss: String,
   cin: String,
-  bureau: String },
+   },
    { _id: false });
 
 const Admin = User.discriminator('admin', AdminFields);
