@@ -40,13 +40,24 @@ const SecretaireFields = new Schema({
    },
    { _id: false });
 
+  const PatientFields = new Schema({ 
+  telephone: Number,
+  dateNaissance: Date,
+  adresse: String,
+  sexe: String,
+  mutuelle: Number,
+  cin: String,
+   },
+   { _id: false });
+
 const Admin = User.discriminator('admin', AdminFields);
 const Medecin = User.discriminator('medecin', MedecinFields);
 const Secretaire = User.discriminator('secretaire', SecretaireFields);
+const Patient = User.discriminator('patient', PatientFields);
 
 const MedecinAdmin = User.discriminator('medecin_admin', new Schema({
   ...MedecinFields.obj,
   ...AdminFields.obj,
 }, { _id: false }));
 
-module.exports = { User, Admin, Medecin, Secretaire, MedecinAdmin };
+module.exports = { User, Admin, Medecin, Secretaire, MedecinAdmin, Patient };
