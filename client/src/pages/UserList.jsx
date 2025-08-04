@@ -1,6 +1,7 @@
 import { useState } from "react";
 import UserEditForm from "./UserEditForm";
 import { Link } from "react-router";
+import DataTable from "react-data-table-component";
 
 export default function UserList({ users, refreshUsers }) {
   const [editingUser, setEditingUser] = useState(null);
@@ -20,13 +21,67 @@ export default function UserList({ users, refreshUsers }) {
       alert("Erreur suppression");
     }
   };
-  const goToEdit = () => {
-    navigate("/edit-user", {
-      state: {
-        user: user,
-        onUpdate: handleUserUpdate,
+
+  const columns = [
+    {
+      name: "Nom Et Prénom",
+      selector: row => row.nom,
+      sortable: true,
+    },
+    {
+      name: "Email",
+      selector: row => row.email,
+      sortable: true,
+    },
+    {
+      name: "Role",
+      selector: row => row.role,
+      sortable: true,
+    },
+    {
+      name: "Actions",
+      cell: (row) => (
+        <div>
+          <button
+            onClick={() => setEditingUser(row)}
+            style={{ marginRight: 10 }}
+            className="btn btn-success"
+          >
+            Modifier
+          </button>
+          <button
+            className="btn btn-danger"
+            onClick={() => handleDelete(row._id)}
+          >
+            Supprimer
+          </button>
+        </div>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    },
+  ];
+
+  const customStyles = {
+    rows: {
+      style: {
+        minHeight: '72px', // override the row height
       },
-    });
+    },
+    headCells: {
+      style: {
+        backgroundColor: '#dc3545', // couleur rouge comme votre table-danger
+        color: 'white',
+        fontSize: '16px',
+        fontWeight: 'bold',
+      },
+    },
+    cells: {
+      style: {
+        fontSize: '15px',
+      },
+    },
   };
 
   return (
@@ -36,50 +91,21 @@ export default function UserList({ users, refreshUsers }) {
           <h2>Liste des utilisateurs</h2>
 
           <Link className="btn btn-primary" type="button" to="/createuser">
-            {" "}
             Nouveau Utilisateur
           </Link>
         </div>
 
         {users.length === 0 && <p>Aucun utilisateur</p>}
-        <table className="table table-bordered table-danger table-hover">
-          <thead>
-            <tr>
-              <th>Nom Et Prénom</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((u) => (
-              <tr key={u._id}>
-                <td>{u.nom}</td>
-               
-                <td>{u.email} </td>
-                <td>{u.role}</td>
-                <td>
-                  {" "}
-                  <button
-                    onClick={() => setEditingUser(u)}
-                    style={{ marginLeft: 10 }}
-                    className="btn btn-success"
-                  >
-                    Modifier
-                  </button>
-                 
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => handleDelete(u._id)}
-                    style={{ marginLeft: 10 }}
-                  >
-                    Supprimer
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        
+        <DataTable
+          columns={columns}
+          data={users}
+          customStyles={customStyles}
+          pagination
+          highlightOnHover
+          pointerOnHover
+          noDataComponent="Aucun utilisateur à afficher"
+        />
 
         {editingUser && (
           <UserEditForm
