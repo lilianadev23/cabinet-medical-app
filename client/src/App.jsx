@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import UserList from './pages/UserList';
 import UserForm from './pages/UserForm';
-import Menu from './components/Menu';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+
+import HomeMA from './MedcinAdmin/HomeMA';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 
 import { BrowserRouter,Routes,Route } from 'react-router-dom'
 import UserEditForm from "./pages/UserEditForm";
@@ -23,18 +25,9 @@ export default function App() {
 
   return (
 
-    <div className="container">
-    
-     <Menu />
-    <BrowserRouter>
-    <Routes>
-    <Route path='/' element={<UserList users={users} refreshUsers={fetchUsers} />} > </Route>
-    <Route path='/createuser' element={  <UserForm onUserCreated={fetchUsers} />} > </Route>
-    <Route path='/edituser' element={  <UserEditForm user={users} onUpdated={fetchUsers} />} > </Route>
-    </Routes>
-    </BrowserRouter>
-       
-    </div>
+    <>
+    <HomeMA  />
+    </>
     
   );
 }
