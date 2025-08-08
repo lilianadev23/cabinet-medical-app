@@ -2,7 +2,7 @@ import React from "react";
 
 const MainPage = () => {
   return (
-    <main id="js-page-content" role="main" className="page-content">
+    <>
       <ol className="breadcrumb page-breadcrumb">
         <li className="breadcrumb-item">
           <a href="javascript:void(0);">SmartAdmin</a>
@@ -91,7 +91,7 @@ const MainPage = () => {
           </div>
         </div>
       </div>
-    </main>
+    </>
   );
 };
 
