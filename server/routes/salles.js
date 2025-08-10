@@ -9,10 +9,10 @@ const {
 } = require('../controllers/salleController');
 
 
-router.post('/salles', ajouterSalle);
-router.get('/salles', getToutesSalles);
-router.get('/salles/:id', getSalleById);
-router.put('/salles/:id', updateSalle);
-router.delete('/salles/:id', deleteSalle);
+router.post('/', ajouterSalle);
+router.get('/', getToutesSalles);
+router.get('/:id', getSalleById);
+router.put('/:id', updateSalle);
+router.delete('/:id', deleteSalle);
 
 module.exports = router;
