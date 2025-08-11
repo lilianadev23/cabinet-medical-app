@@ -6,7 +6,10 @@ const BaseUserSchema = new Schema({
   prenom: { type: String, required: true }, 
   email: { type: String, unique: true, required: true },
   telephone: { type: String, required: true },
- 
+  adresse: { type: String, required: true },
+  CIN: { type: String, required: true },
+  dateNaissance: { type: Date, required: true },
+  sexe: { type: String, required: true },
   motdepasse: { type: String, required: true },
   statut: { type: String, default: "actif" },
   role: { type: String, required: true } 
@@ -23,32 +26,32 @@ const AdminFields = new Schema({
 
 const MedecinFields = new Schema({
    dateDebut: Date,
-   specialite: String, 
-   
-   adresse: String,
+   specialite: String,  
    cabinet: String,
    patients: [String] }, 
    { _id: false });
 
 
-const SecretaireFields = new Schema({ 
-  
-  dateEmbauche: Date,
-  dateNaissance: Date,
+const SecretaireFields = new Schema({   
+  dateEmbauche: Date,  
   niveauEtude: String,
   numCompteBancaire: String,
   numCnss: String,
-  cin: String,
+  TypeDeContrat: String,  
+  salaire:Number,
    },
    { _id: false });
 
   const PatientFields = new Schema({ 
- 
-  dateNaissance: Date,
-  adresse: String,
-  sexe: String,
-  mutuelle: Number,
-  cin: String,
+  NumeroDeDossier: String, 
+  mutuelle: String, 
+  NumeroDeSecuriteSociale: Number,
+  Profession:String,
+  LieuDeNaissance:String,
+  GroupeSanguin:String,
+  MedecinTraitant:String,
+  AllergiesConnues: [String],
+  PathologiesChroniques: [String], 
    },
    { _id: false });
 
