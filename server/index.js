@@ -3,7 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const userRoutes = require('./routes/users');
-
+const salleRoutes = require('./routes/salles');
+const medicamentRoutes = require('./routes/medicaments');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -21,12 +22,13 @@ mongoose.connect(process.env.MONGO_URI, {
 })
 .then(() => console.log('✅ Connecté à MongoDB'))
 .catch(err => {
-  console.error('❌ Erreur MongoDB :', err.message);
+  console.error(' Erreur MongoDB :', err.message);
   process.exit(1);
 });
 
 app.use('/api/users', userRoutes);
-
+app.use('/api/salles', salleRoutes);
+app.use('/api/medicaments', medicamentRoutes);
 app.listen(PORT, () => {
-  console.log(`🚀 Serveur lancé sur le port ${PORT}`);
+  console.log(` Serveur lancé sur le port ${PORT}`);
 });
