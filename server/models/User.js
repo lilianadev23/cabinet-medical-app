@@ -28,7 +28,7 @@ const MedecinFields = new Schema({
    dateDebut: Date,
    specialite: String,  
    cabinet: String,
-   patients: [String] }, 
+    }, 
    { _id: false });
 
 
@@ -47,7 +47,7 @@ const SecretaireFields = new Schema({
   mutuelle: String, 
   NumeroDeSecuriteSociale: Number,
   Profession:String,
-  LieuDeNaissance:String,
+ 
   GroupeSanguin:String,
   MedecinTraitant:String,
   AllergiesConnues: [String],
