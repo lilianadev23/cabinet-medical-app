@@ -425,7 +425,7 @@ const Users = ({ users, refreshUsers }) => {
     finalPathologiesArray.push(autreText.trim());
   }
   const [formData, setFormData] = useState({
-    role: 'admin',
+    role: '',
     nom: '',
     prenom: '', 
     email: '',
@@ -456,40 +456,58 @@ const Users = ({ users, refreshUsers }) => {
     dateNaissance: formData.dateNaissance,
     sexe: formData.sexe,
     motdepasse: formData.motdepasse,
-    statut: formData.statut
+    statut: formData.statut,
+    role:formData.role
     };
 
     // Ajout des champs selon rôle
-    if (formData.role === 'admin') {
-      payload.permissions = formData.permissions.split(',').map(s => s.trim());
-    } else if (formData.role === 'medecin') {
+    if (formData.role === 'Medecin') {
+      payload.dateDebut = formData.dateDebut;
       payload.specialite = formData.specialite;
-      payload.patients = formData.patients.split(',').map(s => s.trim());
-    } else if (formData.role === 'secretaire') {
-      payload.bureau = formData.bureau;
-    } else if (formData.role === 'medecin_admin') {
-      payload.specialite = formData.specialite;
-      payload.patients = formData.patients.split(',').map(s => s.trim());
-      payload.permissions = formData.permissions.split(',').map(s => s.trim());
-    }
+      payload.cabinet = formData.cabinet;
+     
+    } else if (formData.role === 'Secretaire') {
+      payload.dateEmbauche = formData.dateEmbauche;
+      payload.niveauEtude = formData.niveauEtude;
+      payload.numCompteBancaire = formData.numCompteBancaire;
+      payload.numCnss = formData.numCnss;
+      payload.TypeDeContrat = formData.TypeDeContrat;
+      payload.salaire = formData.salaire;
+
+      
+    } else if (formData.role === 'Patient') {
+      payload.NumeroDeDossier = formData.NumeroDeDossier;
+      payload.mutuelle = formData.mutuelle;
+      payload.NumeroDeSecuriteSociale = formData.NumeroDeSecuriteSociale;
+      payload.Profession = formData.Profession;
+      payload.GroupeSanguin = formData.GroupeSanguin;
+      payload.MedecinTraitant = formData.MedecinTraitant;
+      payload.AllergiesConnues = formData.AllergiesConnues.split(',').map(s => s.trim());
+      payload.PathologiesChroniques = formData.PathologiesChroniques.split(',').map(s => s.trim());
+    } 
+    console.log('Payload envoyé :', payload);
 
     const res = await fetch('http://localhost:5000/api/users', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-
+    const resText = await res.text();
+    console.error('Erreur serveur :', res.status, resText);
     if (res.ok) {
       alert('Utilisateur créé !');
       setFormData({
-        role: 'admin',
+        role: '',
         nom: '',
+        prenom: '', 
         email: '',
-        password: '',
-        permissions: '',
-        specialite: '',
-        patients: '',
-        bureau: ''
+        telephone: '',
+        adresse: '',
+        CIN: '',
+        dateNaissance: '',
+        sexe: '',
+        motdepasse: '',
+        statut: ''
       });
     
      
@@ -718,6 +736,7 @@ const Users = ({ users, refreshUsers }) => {
                 </span>
               </button>
             </div>
+            <form onSubmit={handleSubmit} >
             <div className="modal-body">
               <div className="card mb-5">
                 <div className="card-body p-3">
@@ -819,28 +838,35 @@ const Users = ({ users, refreshUsers }) => {
                     </div>
                   </div>
                   <div className="form-group">
-                    <label className="form-label" htmlFor="basic-addon1">
-                    Sexe :
-                    </label>
-                    <div className="demo">
-                   <div className="custom-control custom-switch">
-                        <input type="radio" className="custom-control-input" id="customSwitch1radio" 
-                        name="sexe" 
-                        value={formData.sexe} 
-                        onChange={handleChangeadd} />
-                        <label className="custom-control-label" htmlFor="customSwitch1radio">Femme</label>
-                   </div>
-                   <div className="custom-control custom-switch">
-                        <input type="radio" className="custom-control-input" 
-                        name="sexe" 
-                        value={formData.sexe} 
-                        onChange={handleChangeadd} id="customSwitch2radio" defaultChecked  />
-                        <label className="custom-control-label" htmlFor="customSwitch2radio">Homme</label>
-                   </div>
+  <label className="form-label" htmlFor="basic-addon1">Sexe :</label>
+  <div className="demo">
+    <div className="custom-control custom-switch">
+      <input
+        type="radio"
+        className="custom-control-input"
+        id="customSwitch1radio"
+        name="sexe"
+        value="Femme"
+        checked={formData.sexe === "Femme"}
+        onChange={handleChangeadd}
+      />
+      <label className="custom-control-label" htmlFor="customSwitch1radio">Femme</label>
+    </div>
+    <div className="custom-control custom-switch">
+      <input
+        type="radio"
+        className="custom-control-input"
+        id="customSwitch2radio"
+        name="sexe"
+        value="Homme"
+        checked={formData.sexe === "Homme"}
+        onChange={handleChangeadd}
+      />
+      <label className="custom-control-label" htmlFor="customSwitch2radio">Homme</label>
+    </div>
+  </div>
+</div>
 
-
-                    </div>
-                  </div>
                   <div className="form-group">
                     <label className="form-label" htmlFor="example-date">
                       Date De Naissance :
@@ -957,16 +983,16 @@ const Users = ({ users, refreshUsers }) => {
                         onChange={handleChangeadd}
                       >
                         <option selected>Role</option>
-                        <option value="Medecin">Medecin</option>
-                        <option value="Secretaire">Secretaire</option>
-                        <option value="Patient">Patient</option>
+                        <option value="medecin">Medecin</option>
+                        <option value="secretaire">Secretaire</option>
+                        <option value="patient">Patient</option>
                         <option value="MedecinAdmin">MedecinAdmin</option>
                       </select>
                     </div>
                   </div>
                 </div>
               </div>
-              {(formData.role === 'Medecin' || formData.role === 'MedecinAdmin') && (
+              {(formData.role === 'medecin' || formData.role === 'MedecinAdmin') && (
               <div className="card mb-g">
                 <div className="card-body p-3">
                   <h5 className="text-success">
@@ -986,7 +1012,7 @@ const Users = ({ users, refreshUsers }) => {
                       className="form-control"
                       id="example-date"
                       type="date"
-                      name="date"
+                      
                       defaultValue="2023-07-23"
                       name="dateDebut" 
                         value={formData.dateDebut} 
@@ -1452,10 +1478,11 @@ const Users = ({ users, refreshUsers }) => {
               >
                 Close
               </button>
-              <button type="button" className="btn btn-primary">
+              <button  type="submit" className="btn btn-primary">
                 Save changes
               </button>
             </div>
+            </form>
           </div>
         </div>
       </div>
