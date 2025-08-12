@@ -17,7 +17,7 @@ const BaseUserSchema = new Schema({
 
 
 const User = mongoose.model('User', BaseUserSchema);
-
+ 
 const AdminFields = new Schema({ 
   permissions: [String] },
    { _id: false });
