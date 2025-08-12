@@ -1,4 +1,10 @@
-const { User, Admin, Medecin, Secretaire, MedecinAdmin } = require('../models/User');
+const {
+  User,
+  Medecin,
+  Secretaire,
+  MedecinAdmin,
+  Patient,
+} = require("../models/User");
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -12,7 +18,8 @@ exports.getAllUsers = async (req, res) => {
 exports.getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).exec();
-    if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    if (!user)
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -21,24 +28,90 @@ exports.getUserById = async (req, res) => {
 
 exports.createUser = async (req, res) => {
   try {
-    const { role, nom, email, password, ...rest } = req.body;
+    const {
+      role,
+      nom,
+      prenom,
+      email,
+      telephone,
+      adresse,
+      CIN,
+      dateNaissance,
+      sexe,
+      motdepasse,
+      ...rest
+    } = req.body;
+    
+   
+    const roleNormalized = typeof role === 'string' ? role.trim().toLowerCase() : '';
+    console.log('Role reçu:', `"${role}"`);
+    console.log('Role normalisé:', `"${roleNormalized}"`);
     let user;
-    switch (role) {
-      case 'admin':
-        user = new Admin({ nom, email, password, ...rest });
+    switch (roleNormalized) {
+      case "patient":
+        user = new Patient({
+          role:roleNormalized,
+          nom,
+          prenom,
+          email,
+          telephone,
+          adresse,
+          CIN,
+          dateNaissance,
+          sexe,
+          motdepasse,
+          ...rest,
+        });
         break;
-      case 'medecin':
-        user = new Medecin({ nom, email, password, ...rest });
+      case "medecin":
+        user = new Medecin({
+          role,
+          nom,
+          prenom,
+          email,
+          telephone,
+          adresse,
+          CIN,
+          dateNaissance,
+          sexe,
+          motdepasse,
+          ...rest,
+        });
         break;
-      case 'secretaire':
-        user = new Secretaire({ nom, email, password, ...rest });
+      case "secretaire":
+        user = new Secretaire({
+          role,
+          nom,
+          prenom,
+          email,
+          telephone,
+          adresse,
+          CIN,
+          dateNaissance,
+          sexe,
+          motdepasse,
+          ...rest,
+        });
         break;
-      case 'medecin_admin':
-        user = new MedecinAdmin({ nom, email, password, ...rest });
+      case "medecin_admin":
+        user = new MedecinAdmin({
+          role,
+          nom,
+          prenom,
+          email,
+          telephone,
+          adresse,
+          CIN,
+          dateNaissance,
+          sexe,
+          motdepasse,
+          ...rest,
+        });
         break;
       default:
-        return res.status(400).json({ message: 'Rôle invalide' });
+        return res.status(400).json({ message: "Rôle invalide" });
     }
+
     await user.save();
     res.status(201).json(user);
   } catch (error) {
@@ -49,7 +122,8 @@ exports.createUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).exec();
-    if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    if (!user)
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
     Object.assign(user, req.body);
     await user.save();
     res.json(user);
@@ -61,8 +135,9 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id).exec();
-    if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
-    res.json({ message: 'Utilisateur supprimé' });
+    if (!user)
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    res.json({ message: "Utilisateur supprimé" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

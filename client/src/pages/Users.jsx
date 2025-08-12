@@ -182,23 +182,25 @@ const Users = ({ users, refreshUsers }) => {
       id: "Actions",
       cell: (row) => (
         <div>
-          <a
-            href="javascript:void(0);"
+          <button
+            
             className="btn btn-sm btn-icon btn-outline-danger rounded-circle mr-1"
             title="Annuler RDV"
+            onClick={() => handleDelete(row._id)}
           >
             <i className="fal fa-times" />
-          </a>
+          </button>
           <div className="dropdown d-inline-block dropleft ">
-            <a
+            <button
               href="#"
               className="btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0"
               data-toggle="dropdown"
               aria-expanded="true"
               title="Plus options"
+             
             >
               <i className="fal fa-ellipsis-v" />
-            </a>
+            </button>
             <div className="dropdown-menu">
               <a className="dropdown-item" href="javascript:void(0);">
                 Changer Rdv
@@ -424,6 +426,98 @@ const Users = ({ users, refreshUsers }) => {
   if (showAutreInput && autreText2.trim()) {
     finalPathologiesArray.push(autreText.trim());
   }
+  const [formData, setFormData] = useState({
+    role: '',
+    nom: '',
+    prenom: '', 
+    email: '',
+    telephone: '',
+    adresse: '',
+    CIN: '',
+    dateNaissance: '',
+    sexe: '',
+    motdepasse: '',
+    statut: ''
+  });
+
+  const handleChangeadd = e => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    const payload = {
+      
+    nom: formData.nom,
+    prenom: formData.prenom,
+    email: formData.email,
+    telephone: formData.telephone,
+    adresse: formData.adresse,
+    CIN: formData.CIN,
+    dateNaissance: formData.dateNaissance,
+    sexe: formData.sexe,
+    motdepasse: formData.motdepasse,
+    statut: formData.statut,
+    role:formData.role
+    };
+
+    // Ajout des champs selon rôle
+    if (formData.role === 'medecin') {
+      payload.dateDebut = formData.dateDebut;
+      payload.specialite = formData.specialite;
+      payload.cabinet = formData.cabinet;
+     
+    } else if (formData.role === 'secretaire') {
+      payload.dateEmbauche = formData.dateEmbauche;
+      payload.niveauEtude = formData.niveauEtude;
+      payload.numCompteBancaire = formData.numCompteBancaire;
+      payload.numCnss = formData.numCnss;
+      payload.TypeDeContrat = formData.TypeDeContrat;
+      payload.salaire = formData.salaire;
+
+      
+    } else if (formData.role === 'patient') {
+      payload.NumeroDeDossier = formData.NumeroDeDossier;
+      payload.mutuelle = formData.mutuelle;
+      payload.NumeroDeSecuriteSociale = formData.NumeroDeSecuriteSociale;
+      payload.Profession = formData.Profession;
+      payload.GroupeSanguin = formData.GroupeSanguin;
+      payload.MedecinTraitant = formData.MedecinTraitant;
+      payload.AllergiesConnues = selectedValuesArray;
+      payload.PathologiesChroniques = finalPathologiesArray;
+    } 
+    console.log('Payload envoyé :', payload);
+
+    const res = await fetch('http://localhost:5000/api/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const resText = await res.text();
+    console.error('Erreur serveur :', res.status, resText);
+    if (res.ok) {
+      alert('Utilisateur créé !');
+      setFormData({
+        role: '',
+        nom: '',
+        prenom: '', 
+        email: '',
+        telephone: '',
+        adresse: '',
+        CIN: '',
+        dateNaissance: '',
+        sexe: '',
+        motdepasse: '',
+        statut: ''
+      });
+    
+     
+      
+    } else {
+      alert('Erreur création utilisateur');
+    }
+  };
   
   return (
     <div>
@@ -644,6 +738,7 @@ const Users = ({ users, refreshUsers }) => {
                 </span>
               </button>
             </div>
+            <form onSubmit={handleSubmit} >
             <div className="modal-body">
               <div className="card mb-5">
                 <div className="card-body p-3">
@@ -663,6 +758,9 @@ const Users = ({ users, refreshUsers }) => {
                         className="form-control"
                         placeholder="Prénom"
                         id="name-f"
+                        name="prenom" 
+                        value={formData.prenom} 
+                        onChange={handleChangeadd}
                       />
                       <input
                         type="text"
@@ -670,6 +768,9 @@ const Users = ({ users, refreshUsers }) => {
                         className="form-control"
                         placeholder="Nom"
                         id="name-l"
+                        name="nom" 
+                        value={formData.nom} 
+                        onChange={handleChangeadd}
                       />
                     </div>
                   </div>
@@ -689,6 +790,9 @@ const Users = ({ users, refreshUsers }) => {
                         placeholder="E-mail"
                         aria-label="E-mail"
                         aria-describedby="basic-addon1"
+                        name="email" 
+                        value={formData.email} 
+                        onChange={handleChangeadd}
                       />
                     </div>
                   </div>
@@ -708,6 +812,9 @@ const Users = ({ users, refreshUsers }) => {
                         placeholder="Téléphone"
                         aria-label="E-mail"
                         aria-describedby="basic-addon1"
+                        name="telephone" 
+                        value={formData.telephone} 
+                        onChange={handleChangeadd}
                       />
                     </div>
                   </div>
@@ -726,26 +833,42 @@ const Users = ({ users, refreshUsers }) => {
                         placeholder="CIN"
                         aria-label="E-mail"
                         aria-describedby="basic-addon1"
+                        name="CIN" 
+                        value={formData.CIN} 
+                        onChange={handleChangeadd}
                       />
                     </div>
                   </div>
                   <div className="form-group">
-                    <label className="form-label" htmlFor="basic-addon1">
-                    Sexe :
-                    </label>
-                    <div className="demo">
-                   <div className="custom-control custom-switch">
-                        <input type="radio" className="custom-control-input" id="customSwitch1radio" name="defaultSwitchRadioExample" />
-                        <label className="custom-control-label" htmlFor="customSwitch1radio">Femme</label>
-                   </div>
-                   <div className="custom-control custom-switch">
-                        <input type="radio" className="custom-control-input" id="customSwitch2radio" defaultChecked name="defaultSwitchRadioExample" />
-                        <label className="custom-control-label" htmlFor="customSwitch2radio">Homme</label>
-                   </div>
+  <label className="form-label" htmlFor="basic-addon1">Sexe :</label>
+  <div className="demo">
+    <div className="custom-control custom-switch">
+      <input
+        type="radio"
+        className="custom-control-input"
+        id="customSwitch1radio"
+        name="sexe"
+        value="Femme"
+        checked={formData.sexe === "Femme"}
+        onChange={handleChangeadd}
+      />
+      <label className="custom-control-label" htmlFor="customSwitch1radio">Femme</label>
+    </div>
+    <div className="custom-control custom-switch">
+      <input
+        type="radio"
+        className="custom-control-input"
+        id="customSwitch2radio"
+        name="sexe"
+        value="Homme"
+        checked={formData.sexe === "Homme"}
+        onChange={handleChangeadd}
+      />
+      <label className="custom-control-label" htmlFor="customSwitch2radio">Homme</label>
+    </div>
+  </div>
+</div>
 
-
-                    </div>
-                  </div>
                   <div className="form-group">
                     <label className="form-label" htmlFor="example-date">
                       Date De Naissance :
@@ -754,8 +877,11 @@ const Users = ({ users, refreshUsers }) => {
                       className="form-control"
                       id="example-date"
                       type="date"
-                      name="date"
+                      
                       defaultValue="2023-07-23"
+                      name="dateNaissance" 
+                        value={formData.dateNaissance} 
+                        onChange={handleChangeadd}
                     />
                   </div>
 
@@ -778,6 +904,9 @@ const Users = ({ users, refreshUsers }) => {
                         className="form-control"
                         placeholder="Mot de passe"
                         id="user"
+                        name="motdepasse" 
+                        value={formData.motdepasse} 
+                        onChange={handleChangeadd}
                       />
                     </div>
                   </div>
@@ -796,10 +925,13 @@ const Users = ({ users, refreshUsers }) => {
                         className="custom-select"
                         id="usertype"
                         aria-label="usertype"
+                        name="statut" 
+                        value={formData.statut} 
+                        onChange={handleChangeadd}
                       >
                         <option selected>Statut</option>
-                        <option value={1}>Active</option>
-                        <option value={2}>Désactive</option>
+                        <option value="Active">Active</option>
+                        <option value="Désactive">Désactive</option>
                       </select>
                     </div>
                   </div>
@@ -815,6 +947,9 @@ const Users = ({ users, refreshUsers }) => {
                         className="form-control"
                         aria-label="With textarea"
                         defaultValue={""}
+                        name="adresse" 
+                        value={formData.adresse} 
+                        onChange={handleChangeadd}
                       />
                     </div>
                   </div>
@@ -843,19 +978,23 @@ const Users = ({ users, refreshUsers }) => {
                       </div>
                       <select
                         className="custom-select"
-                        id="usertype"
+                        id="role"
+                        name="role"
                         aria-label="usertype"
+                        value={formData.role} 
+                        onChange={handleChangeadd}
                       >
                         <option selected>Role</option>
-                        <option value={1}>Medecin</option>
-                        <option value={2}>Secretaire</option>
-                        <option value={3}>Patient</option>
-                        <option value={4}>MedecinAdmin</option>
+                        <option value="medecin">Médecin</option>
+  <option value="secretaire">Secrétaire</option>
+  <option value="patient">Patient</option>
+  <option value="medecin_admin">Médecin Admin</option>
                       </select>
                     </div>
                   </div>
                 </div>
               </div>
+              {(formData.role === 'medecin' || formData.role === 'MedecinAdmin') && (
               <div className="card mb-g">
                 <div className="card-body p-3">
                   <h5 className="text-success">
@@ -875,8 +1014,11 @@ const Users = ({ users, refreshUsers }) => {
                       className="form-control"
                       id="example-date"
                       type="date"
-                      name="date"
+                      
                       defaultValue="2023-07-23"
+                      name="dateDebut" 
+                        value={formData.dateDebut} 
+                        onChange={handleChangeadd}
                     />
                   </div>
                   <div className="form-group">
@@ -889,7 +1031,11 @@ const Users = ({ users, refreshUsers }) => {
                           <i className="ni ni-user fs-xl" />
                         </span>
                       </div>
-                      <select className="custom-select" id="specialite">
+                      <select className="custom-select" id="specialite" 
+                      name="specialite" 
+                      value={formData.specialite} 
+                      onChange={handleChangeadd}
+                      >
                         <option value="" selected disabled>
                           Choisir une spécialité
                         </option>
@@ -913,11 +1059,16 @@ const Users = ({ users, refreshUsers }) => {
                         className="form-control"
                         aria-label="With textarea"
                         defaultValue={""}
+                        name="cabinet" 
+                        value={formData.cabinet} 
+                        onChange={handleChangeadd}
                       />
                     </div>
                   </div>
                 </div>
               </div>
+              )}
+              {formData.role === 'secretaire'  && (
               <div className="card mb-g">
                 <div className="card-body p-3">
                 <h5 className="text-success">
@@ -937,8 +1088,11 @@ const Users = ({ users, refreshUsers }) => {
                       className="form-control"
                       id="example-date"
                       type="date"
-                      name="date"
+                      
                       defaultValue="2023-07-23"
+                      name="dateEmbauche" 
+                        value={formData.dateEmbauche} 
+                        onChange={handleChangeadd}
                     />
                   </div>
                   <div className="form-group">
@@ -951,7 +1105,10 @@ const Users = ({ users, refreshUsers }) => {
                           <i className="ni ni-user fs-xl" />
                         </span>
                       </div>
-                      <select className="custom-select" id="specialite">
+                      <select className="custom-select" id="specialite"
+                      name="niveauEtude" 
+                      value={formData.niveauEtude} 
+                      onChange={handleChangeadd}>
                         <option value="" selected disabled>
                           Choisir un Niveau Etude :
                         </option>
@@ -975,7 +1132,11 @@ const Users = ({ users, refreshUsers }) => {
                           <i className="ni ni-user fs-xl" />
                         </span>
                       </div>
-                      <select className="custom-select" id="specialite">
+                      <select className="custom-select" id="specialite"
+                      name="TypeDeContrat" 
+                      value={formData.TypeDeContrat} 
+                      onChange={handleChangeadd}
+                      >
                         <option value="" selected disabled>
                           Choisir Type De Contrat :
                         </option>
@@ -1000,6 +1161,9 @@ const Users = ({ users, refreshUsers }) => {
                         className="form-control"
                         aria-label="Amount (to the nearest dollar)"
                         placeholder="Salaire"
+                        name="salaire" 
+                        value={formData.salaire} 
+                        onChange={handleChangeadd}
                       />
                       <div className="input-group-append">
                         <span className="input-group-text">DH</span>
@@ -1019,6 +1183,9 @@ const Users = ({ users, refreshUsers }) => {
                         className="form-control"
                         aria-label="Amount (to the nearest dollar)"
                         placeholder="Numéro Compte Bancaire"
+                        name="numCompteBancaire" 
+                        value={formData.numCompteBancaire} 
+                        onChange={handleChangeadd}
                       />
                      
                     </div>
@@ -1036,6 +1203,9 @@ const Users = ({ users, refreshUsers }) => {
                         className="form-control"
                         aria-label="Amount (to the nearest dollar)"
                         placeholder="Numéro CNSS :"
+                        name="numCnss" 
+                        value={formData.numCnss} 
+                        onChange={handleChangeadd}
                       />
                      
                     </div>
@@ -1043,6 +1213,8 @@ const Users = ({ users, refreshUsers }) => {
                   
                 </div>
               </div>
+              )}
+              {formData.role === 'patient'  && (
               <div className="card mb-g">
                 <div className="card-body p-3">
                 <h5 className="text-success">
@@ -1067,6 +1239,9 @@ const Users = ({ users, refreshUsers }) => {
                         className="form-control"
                         aria-label="Amount (to the nearest dollar)"
                         placeholder="Numéro De Dossier"
+                        name="NumeroDeDossier" 
+                        value={formData.NumeroDeDossier} 
+                        onChange={handleChangeadd}
                       />
                      
                     </div>
@@ -1081,7 +1256,10 @@ const Users = ({ users, refreshUsers }) => {
                           <i className="ni ni-user fs-xl" />
                         </span>
                       </div>
-                      <select className="custom-select" id="specialite">
+                      <select className="custom-select" id="Profession"
+                      name="Profession" 
+                      value={formData.Profession} 
+                      onChange={handleChangeadd}>
                         <option value="" selected disabled>
                           Choisir Profession :
                         </option>
@@ -1109,7 +1287,10 @@ const Users = ({ users, refreshUsers }) => {
                           <i className="ni ni-user fs-xl" />
                         </span>
                       </div>
-                      <select className="custom-select" id="specialite">
+                      <select className="custom-select" id="GroupeSanguin" 
+                      name="GroupeSanguin" 
+                        value={formData.GroupeSanguin} 
+                        onChange={handleChangeadd}>
                       <option value="" disabled selected>
     Choisissez un groupe sanguin
   </option>
@@ -1139,6 +1320,7 @@ const Users = ({ users, refreshUsers }) => {
         onChange={handleChange}
         placeholder="Sélectionnez les allergies connues..."
         className="basic-multi-select"
+        name="AllergiesConnues"                         
         classNamePrefix="select"
         isOptionDisabled={(option) =>
           selectedAllergies.some((sel) => sel.value === "aucune") &&
@@ -1159,6 +1341,7 @@ const Users = ({ users, refreshUsers }) => {
             placeholder="Entrez une allergie non listée"
             value={autreText}
             onChange={(e) => setAutreText(e.target.value)}
+            name=""
           />
         </div>
       )}
@@ -1186,6 +1369,7 @@ const Users = ({ users, refreshUsers }) => {
         placeholder="Sélectionnez les pathologies chroniques..."
         className="basic-multi-select"
         classNamePrefix="select"
+        name="PathologiesChroniques"
         isOptionDisabled={(option) =>
           selectedPathologies.some((sel) => sel.value === "aucune") &&
           option.value !== "aucune"
@@ -1216,21 +1400,31 @@ const Users = ({ users, refreshUsers }) => {
                   </div>
                   <div className="form-group">
                     <label className="form-label" htmlFor="basic-url">
-                      Salaire :
+                    Médecin Traitant :
                     </label>
                     <div className="input-group">
                       <div className="input-group-prepend">
                         <span className="input-group-text">$</span>
                       </div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        aria-label="Amount (to the nearest dollar)"
-                        placeholder="Salaire"
-                      />
-                      <div className="input-group-append">
-                        <span className="input-group-text">DH</span>
-                      </div>
+                      <select className="custom-select" id="specialite" 
+                      name="MedecinTraitant" 
+                        value={formData.MedecinTraitant} 
+                        onChange={handleChangeadd}>
+                        <option value="" selected disabled>
+                          Choisir Profession :
+                        </option>
+
+                        {professions.map((option) => (
+    <option
+      key={option.value}
+      value={option.value}
+      disabled={option.disabled}
+      selected={option.disabled}
+    >
+      {option.label}
+    </option>
+  ))}
+                      </select>
                     </div>
                   </div>
                   <div className="form-group">
@@ -1246,6 +1440,9 @@ const Users = ({ users, refreshUsers }) => {
                         className="form-control"
                         aria-label="Amount (to the nearest dollar)"
                         placeholder="Mutuelle / Assurance"
+                        name="mutuelle" 
+                        value={formData.mutuelle} 
+                        onChange={handleChangeadd}
                       />
                      
                     </div>
@@ -1263,6 +1460,9 @@ const Users = ({ users, refreshUsers }) => {
                         className="form-control"
                         aria-label="Amount (to the nearest dollar)"
                         placeholder="Numéro De Sécurite Sociale"
+                        name="NumeroDeSecuriteSociale" 
+                        value={formData.NumeroDeSecuriteSociale} 
+                        onChange={handleChangeadd}
                       />
                      
                     </div>
@@ -1270,6 +1470,7 @@ const Users = ({ users, refreshUsers }) => {
                   
                 </div>
               </div>
+              )}
             </div>
             <div className="modal-footer">
               <button
@@ -1279,10 +1480,11 @@ const Users = ({ users, refreshUsers }) => {
               >
                 Close
               </button>
-              <button type="button" className="btn btn-primary">
+              <button  type="submit" className="btn btn-primary">
                 Save changes
               </button>
             </div>
+            </form>
           </div>
         </div>
       </div>
