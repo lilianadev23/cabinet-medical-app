@@ -182,23 +182,25 @@ const Users = ({ users, refreshUsers }) => {
       id: "Actions",
       cell: (row) => (
         <div>
-          <a
-            href="javascript:void(0);"
+          <button
+            
             className="btn btn-sm btn-icon btn-outline-danger rounded-circle mr-1"
             title="Annuler RDV"
+            onClick={() => handleDelete(row._id)}
           >
             <i className="fal fa-times" />
-          </a>
+          </button>
           <div className="dropdown d-inline-block dropleft ">
-            <a
+            <button
               href="#"
               className="btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0"
               data-toggle="dropdown"
               aria-expanded="true"
               title="Plus options"
+             
             >
               <i className="fal fa-ellipsis-v" />
-            </a>
+            </button>
             <div className="dropdown-menu">
               <a className="dropdown-item" href="javascript:void(0);">
                 Changer Rdv
@@ -461,12 +463,12 @@ const Users = ({ users, refreshUsers }) => {
     };
 
     // Ajout des champs selon rôle
-    if (formData.role === 'Medecin') {
+    if (formData.role === 'medecin') {
       payload.dateDebut = formData.dateDebut;
       payload.specialite = formData.specialite;
       payload.cabinet = formData.cabinet;
      
-    } else if (formData.role === 'Secretaire') {
+    } else if (formData.role === 'secretaire') {
       payload.dateEmbauche = formData.dateEmbauche;
       payload.niveauEtude = formData.niveauEtude;
       payload.numCompteBancaire = formData.numCompteBancaire;
@@ -475,15 +477,15 @@ const Users = ({ users, refreshUsers }) => {
       payload.salaire = formData.salaire;
 
       
-    } else if (formData.role === 'Patient') {
+    } else if (formData.role === 'patient') {
       payload.NumeroDeDossier = formData.NumeroDeDossier;
       payload.mutuelle = formData.mutuelle;
       payload.NumeroDeSecuriteSociale = formData.NumeroDeSecuriteSociale;
       payload.Profession = formData.Profession;
       payload.GroupeSanguin = formData.GroupeSanguin;
       payload.MedecinTraitant = formData.MedecinTraitant;
-      payload.AllergiesConnues = formData.AllergiesConnues.split(',').map(s => s.trim());
-      payload.PathologiesChroniques = formData.PathologiesChroniques.split(',').map(s => s.trim());
+      payload.AllergiesConnues = selectedValuesArray;
+      payload.PathologiesChroniques = finalPathologiesArray;
     } 
     console.log('Payload envoyé :', payload);
 
@@ -983,10 +985,10 @@ const Users = ({ users, refreshUsers }) => {
                         onChange={handleChangeadd}
                       >
                         <option selected>Role</option>
-                        <option value="medecin">Medecin</option>
-                        <option value="secretaire">Secretaire</option>
-                        <option value="patient">Patient</option>
-                        <option value="MedecinAdmin">MedecinAdmin</option>
+                        <option value="medecin">Médecin</option>
+  <option value="secretaire">Secrétaire</option>
+  <option value="patient">Patient</option>
+  <option value="medecin_admin">Médecin Admin</option>
                       </select>
                     </div>
                   </div>
@@ -1066,7 +1068,7 @@ const Users = ({ users, refreshUsers }) => {
                 </div>
               </div>
               )}
-              {formData.role === 'Secretaire'  && (
+              {formData.role === 'secretaire'  && (
               <div className="card mb-g">
                 <div className="card-body p-3">
                 <h5 className="text-success">
@@ -1212,7 +1214,7 @@ const Users = ({ users, refreshUsers }) => {
                 </div>
               </div>
               )}
-              {formData.role === 'Patient'  && (
+              {formData.role === 'patient'  && (
               <div className="card mb-g">
                 <div className="card-body p-3">
                 <h5 className="text-success">
@@ -1254,7 +1256,7 @@ const Users = ({ users, refreshUsers }) => {
                           <i className="ni ni-user fs-xl" />
                         </span>
                       </div>
-                      <select className="custom-select" id="specialite"
+                      <select className="custom-select" id="Profession"
                       name="Profession" 
                       value={formData.Profession} 
                       onChange={handleChangeadd}>
@@ -1285,7 +1287,7 @@ const Users = ({ users, refreshUsers }) => {
                           <i className="ni ni-user fs-xl" />
                         </span>
                       </div>
-                      <select className="custom-select" id="specialite" 
+                      <select className="custom-select" id="GroupeSanguin" 
                       name="GroupeSanguin" 
                         value={formData.GroupeSanguin} 
                         onChange={handleChangeadd}>

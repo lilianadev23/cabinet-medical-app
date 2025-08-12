@@ -45,7 +45,7 @@ const SecretaireFields = new Schema({
   const PatientFields = new Schema({ 
   NumeroDeDossier: String, 
   mutuelle: String, 
-  NumeroDeSecuriteSociale: Number,
+  NumeroDeSecuriteSociale: String,
   Profession:String,
  
   GroupeSanguin:String,
@@ -55,7 +55,7 @@ const SecretaireFields = new Schema({
    },
    { _id: false });
 
-const Admin = User.discriminator('admin', AdminFields);
+
 const Medecin = User.discriminator('medecin', MedecinFields);
 const Secretaire = User.discriminator('secretaire', SecretaireFields);
 const Patient = User.discriminator('patient', PatientFields);
@@ -65,4 +65,4 @@ const MedecinAdmin = User.discriminator('medecin_admin', new Schema({
   ...AdminFields.obj,
 }, { _id: false }));
 
-module.exports = { User, Admin, Medecin, Secretaire, MedecinAdmin, Patient };
+module.exports = { User, Medecin, Secretaire, MedecinAdmin, Patient };
