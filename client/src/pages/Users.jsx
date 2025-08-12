@@ -270,7 +270,7 @@ const Users = ({ users, refreshUsers }) => {
     },
   };
 
-  // 👇 Options pour react-select
+  // 👇 Options pour react-select pour ajoute
   const selectOptions = allColumns.map((col) => ({
     value: col.id,
     label: col.name,
