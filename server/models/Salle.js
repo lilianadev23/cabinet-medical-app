@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const SalleSchema = new Schema({
   nom: { type: String, required: true },       
   capacite: { type: Number, required: true },  
-  statut: { type: String, default: "disponible" } 
+  statut: { type: String,enum: ['disponible', 'occupée'], default: "disponible" } 
 }, { timestamps: true }); 
 
 // Création du modèle
