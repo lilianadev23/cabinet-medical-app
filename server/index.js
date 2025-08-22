@@ -5,6 +5,14 @@ const cors = require('cors');
 const userRoutes = require('./routes/users');
 const salleRoutes = require('./routes/salles');
 const medicamentRoutes = require('./routes/medicaments');
+const rendezVousRoutes = require('./routes/rendezVous');
+const notificationRoutes = require('./routes/notification');
+const dossierMedicalRoutes = require('./routes/dossierMedical');
+const consultationRoutes = require('./routes/consultation');
+const ordonnanceRoutes = require('./routes/ordonnance');
+const ligneOrdonnanceRoutes = require('./routes/ligneOrdonnance');
+const paiementRoutes = require('./routes/paiement');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -29,6 +37,15 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use('/api/users', userRoutes);
 app.use('/api/salles', salleRoutes);
 app.use('/api/medicaments', medicamentRoutes);
+app.use('/api/rendezvous', rendezVousRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/dossiers', dossierMedicalRoutes);
+app.use('/api/consultations', consultationRoutes);
+app.use('/api/ordonnances',ordonnanceRoutes);
+app.use('/api/lignesordonnances',ligneOrdonnanceRoutes);
+app.use('/api/paiements', paiementRoutes);
+
+
 app.listen(PORT, () => {
   console.log(` Serveur lancé sur le port ${PORT}`);
 });
