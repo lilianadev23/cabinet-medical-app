@@ -1,4 +1,5 @@
-// models/Ordonnance.js
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 const OrdonnanceSchema = new Schema({
   consultation: { type: Schema.Types.ObjectId, ref: 'Consultation' },
   lignes: [{ type: Schema.Types.ObjectId, ref: 'LigneOrdonnance' }]

@@ -1,0 +1,9 @@
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+const DossierMedicalSchema = new Schema({
+  patient: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  allergies: [String],
+  antecedents: [String]
+}, { timestamps: true });
+
+module.exports = mongoose.model('DossierMedical', DossierMedicalSchema);

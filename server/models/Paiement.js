@@ -1,4 +1,5 @@
-
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 const PaiementSchema = new Schema({
   montant: { type: Number, required: true },
   datePaiement: { type: Date, default: Date.now },

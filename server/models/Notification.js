@@ -1,4 +1,5 @@
-
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 const NotificationSchema = new Schema({
   message: { type: String, required: true },
   typeNotification: { type: String },

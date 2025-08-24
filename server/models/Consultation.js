@@ -1,4 +1,5 @@
-// models/Consultation.js
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 const ConsultationSchema = new Schema({
   patient: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   medecin: { type: Schema.Types.ObjectId, ref: 'User', required: true },
