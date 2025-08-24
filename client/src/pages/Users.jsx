@@ -178,6 +178,20 @@ const Users = ({ users, refreshUsers }) => {
       hideBelow768: true,
     },
     {
+      name: "Téléphone",
+      selector: (row) => row.telephone,
+      sortable: true,
+      id: "Role",
+      hideBelow768: true,
+    },
+    {
+      name: "Email",
+      selector: (row) => row.email,
+      sortable: true,
+      id: "Role",
+      hideBelow768: true,
+    },
+    {
       name: "Actions",
       id: "Actions",
       cell: (row) => (
@@ -185,7 +199,7 @@ const Users = ({ users, refreshUsers }) => {
           <button
             
             className="btn btn-sm btn-icon btn-outline-danger rounded-circle mr-1"
-            title="Annuler RDV"
+            title="Supprimer"
             onClick={() => handleDelete(row._id)}
           >
             <i className="fal fa-times" />
@@ -203,10 +217,10 @@ const Users = ({ users, refreshUsers }) => {
             </button>
             <div className="dropdown-menu">
               <a className="dropdown-item" href="javascript:void(0);">
-                Changer Rdv
+                Modifier
               </a>
               <a className="dropdown-item" href="javascript:void(0);">
-                Valider RDV
+                Changer Statuts
               </a>
             </div>
           </div>

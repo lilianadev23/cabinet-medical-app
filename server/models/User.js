@@ -46,8 +46,7 @@ const SecretaireFields = new Schema({
   NumeroDeDossier: String, 
   mutuelle: String, 
   NumeroDeSecuriteSociale: String,
-  Profession:String,
- 
+  Profession:String, 
   GroupeSanguin:String,
   MedecinTraitant:String,
   AllergiesConnues: [String],
