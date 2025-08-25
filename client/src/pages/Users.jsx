@@ -11,6 +11,20 @@ import Select, { components } from "react-select";
 const Users = ({ users, refreshUsers }) => {
   const [filterText, setFilterText] = useState("");
   const [copied, setCopied] = useState(false);
+  const [formData, setFormData] = useState({
+    role: '',
+    nom: '',
+    prenom: '', 
+    email: '',
+    telephone: '',
+    adresse: '',
+    CIN: '',
+    dateNaissance: '',
+    sexe: '',
+    motdepasse: '',
+    statut: ''
+  });
+
   const allergieOptions = [
     { value: "penicilline", label: "Pénicilline" },
     { value: "aspirine", label: "Aspirine" },
@@ -216,9 +230,11 @@ const Users = ({ users, refreshUsers }) => {
               <i className="fal fa-ellipsis-v" />
             </button>
             <div className="dropdown-menu">
-              <a className="dropdown-item" href="javascript:void(0);">
+              <button className="dropdown-item" data-toggle="modal"
+                      data-target=".default-example-modal-right"
+              onClick={() => handleEdit(row)}>
                 Modifier
-              </a>
+              </button>
               <a className="dropdown-item" href="javascript:void(0);">
                 Changer Statuts
               </a>
@@ -231,6 +247,43 @@ const Users = ({ users, refreshUsers }) => {
       button: true,
     },
   ];
+  const handleEdit = (user) => {
+    console.log(user) 
+  
+      setFormData({
+        role: user.role,
+        nom: user.nom,
+        prenom: user.prenom,
+        email: user.email,
+        telephone: user.telephone,
+        adresse: user.adresse,
+        CIN: user.CIN,
+        dateNaissance: user.dateNaissance,
+        sexe: user.sexe,
+        motdepasse: user.motdepasse,
+        statut: user.statut, 
+        cabinet : user.cabinet, 
+        dateDebut : user.dateDebut,
+        specialite : user.specialite, 
+        dateEmbauche : user.dateEmbauche,
+        niveauEtude : user.niveauEtude,
+        numCompteBancaire : user.numCompteBancaire,
+       numCnss : user.numCnss,
+       TypeDeContrat : user.TypeDeContrat,
+       salaire : user.salaire,
+       NumeroDeDossier : user.NumeroDeDossier,
+     mutuelle : user.mutuelle,
+      NumeroDeSecuriteSociale : user.NumeroDeSecuriteSociale,
+      Profession : user.Profession,
+     GroupeSanguin : user.GroupeSanguin,
+      MedecinTraitant : user.MedecinTraitant,
+      AllergiesConnues : user.AllergiesConnues,
+      PathologiesChroniques : user.PathologiesChroniques,   
+        
+      });
+    
+     
+  };
 
   const customStyles = {
     table: {
@@ -440,20 +493,7 @@ const Users = ({ users, refreshUsers }) => {
   if (showAutreInput && autreText2.trim()) {
     finalPathologiesArray.push(autreText.trim());
   }
-  const [formData, setFormData] = useState({
-    role: '',
-    nom: '',
-    prenom: '', 
-    email: '',
-    telephone: '',
-    adresse: '',
-    CIN: '',
-    dateNaissance: '',
-    sexe: '',
-    motdepasse: '',
-    statut: ''
-  });
-
+ 
   const handleChangeadd = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -556,74 +596,27 @@ const Users = ({ users, refreshUsers }) => {
         <div className="subheader-block">Right content of header</div>
       </div>
       <div className="alert alert-primary">
-        <div className="d-flex flex-start w-100">
-          <div className="mr-2 hidden-md-down">
-            <span className="icon-stack icon-stack-lg">
-              <i className="base base-6 icon-stack-3x opacity-100 color-primary-500" />
-              <i className="base base-10 icon-stack-2x opacity-100 color-primary-300 fa-flip-vertical" />
-              <i className="ni ni-blog-read icon-stack-1x opacity-100 color-white" />
-            </span>
-          </div>
-          <div className="d-flex flex-fill">
-            <div className="flex-fill">
-              <span className="h5">About</span>
-              <p>Points.</p>
-              <p className="m-0">
-                Find in-depth, guidelines, tutorials and more on Addon's{" "}
-                <a href="#" target="_blank">
-                  Official Documentation
-                </a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-xl-12">
-          <div id="panel-1" className="panel">
-            <div className="panel-hdr">
-              <h2>
-                Liste Des Utilisateurs :{" "}
-                <span className="fw-300">
-                  <i>Title</i>
-                </span>
-              </h2>
-              <div className="panel-toolbar">
-                <button
-                  className="btn btn-panel"
-                  data-action="panel-collapse"
-                  data-toggle="tooltip"
-                  data-offset="0,10"
-                  data-original-title="Collapse"
-                />
-                <button
-                  className="btn btn-panel"
-                  data-action="panel-fullscreen"
-                  data-toggle="tooltip"
-                  data-offset="0,10"
-                  data-original-title="Fullscreen"
-                />
-                <button
-                  className="btn btn-panel"
-                  data-action="panel-close"
-                  data-toggle="tooltip"
-                  data-offset="0,10"
-                  data-original-title="Close"
-                />
-              </div>
-            </div>
-            <div className="panel-container show">
-              <div className="panel-content">
-                <div className="d-flex justify-content-between">
+        
+          
+          
+              
+              
+             
+              <div className="row w-100">
+                  <div className="col-lg-4 col-sm-12 d-flex justify-content-center align-items-center">
+                  
+                  <h5 className="me-4">Recherche :</h5>
                   <input
                     type="text"
                     placeholder="Rechercher par nom ou email"
-                    className="form-control mb-3"
+                    className="form-control  mb-3"
                     value={filterText}
                     onChange={(e) => setFilterText(e.target.value)}
                     style={{ maxWidth: 300 }}
                   />
-                  <div>
+                  
+                 </div>
+                  <div className="col-lg-4 col-sm-12">
                     <button
                       className="btn btn-primary mx-2"
                       onClick={exportExcel}
@@ -634,12 +627,7 @@ const Users = ({ users, refreshUsers }) => {
                       Exporter PDF
                     </button>
 
-                    <button
-                      className="btn btn-info mx-2"
-                      onClick={handlePrintSafe}
-                    >
-                      Imprimer
-                    </button>
+                    
                     <button
                       className="btn btn-success mx-2"
                       data-toggle="modal"
@@ -649,8 +637,8 @@ const Users = ({ users, refreshUsers }) => {
                       Nouveau Utilisateur
                     </button>
                   </div>
-                </div>
-                <div className="d-flex">
+                  <div className="col-lg-4 col-sm-6">
+                  <div className="d-flex mb-3">
                   {/* ✅ Select multi avec design custom */}
                   <Select
                     isMulti
@@ -694,6 +682,50 @@ const Users = ({ users, refreshUsers }) => {
                     {allSelected ? "Tout masquer" : "Tout afficher"}
                   </button>
                 </div>
+                  </div>
+                </div>
+             
+            
+        
+      </div>
+      <div className="row">
+        <div className="col-xl-12">
+          <div id="panel-1" className="panel">
+            <div className="panel-hdr">
+              <h2>
+                Liste Des Utilisateurs :{" "}
+                <span className="fw-300">
+                  <i>Title</i>
+                </span>
+              </h2>
+              <div className="panel-toolbar">
+                <button
+                  className="btn btn-panel"
+                  data-action="panel-collapse"
+                  data-toggle="tooltip"
+                  data-offset="0,10"
+                  data-original-title="Collapse"
+                />
+                <button
+                  className="btn btn-panel"
+                  data-action="panel-fullscreen"
+                  data-toggle="tooltip"
+                  data-offset="0,10"
+                  data-original-title="Fullscreen"
+                />
+                <button
+                  className="btn btn-panel"
+                  data-action="panel-close"
+                  data-toggle="tooltip"
+                  data-offset="0,10"
+                  data-original-title="Close"
+                />
+              </div>
+            </div>
+            <div className="panel-container show">
+              <div className="panel-content">
+                
+               
                 <div
                   ref={tableRef}
                   style={{
@@ -1363,7 +1395,9 @@ const Users = ({ users, refreshUsers }) => {
       <div className="mt-3">
         <strong>Valeurs enregistrées :</strong>
         <pre>{JSON.stringify(selectedValuesArray, null, 2)}</pre>
+        
       </div>
+      
                   </div>
                   <div className="form-group">
                     <label className="form-label" htmlFor="name-f">
