@@ -86,12 +86,12 @@ const NavBar = () => {
           </a>
         </li>
         <li>
-          <a href="#" title="Package Info" data-filter-tags="package info">
+        <Link to="/medicament">
             <i className="fal fa-tag" />
             <span className="nav-link-text" data-i18n="nav.package_info">
-              Documentation
+            Médicaments
             </span>
-          </a>
+            </Link>
         </li>
         <li className="nav-title">Gestion des patients</li>
         <li>

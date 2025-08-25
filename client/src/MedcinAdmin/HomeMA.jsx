@@ -5,6 +5,7 @@ import NavHeader from '../components/NavHeader'
 import NavBar from '../components/NavBar'
 import NavFooter from '../components/NavFooter'
 import Users from '../pages/Users'
+import Medicament from '../pages/Medicament'
 import Header from '../components/Header'
 import MainPage from '../components/MainPage'
 import FooterPage from '../components/FooterPage'
@@ -18,15 +19,21 @@ import DashBord from '../components/DashBord'
 
 const HomeMA = () => {
   const [users, setUsers] = useState([]);
+  const [medicaments, setmedicaments] = useState([]);
 
   const fetchUsers = async () => {
     const res = await fetch('http://localhost:5000/api/users');
     const data = await res.json();
     setUsers(data);
   };
+  const fetchMedicament = async () => {
+    const res = await fetch('http://localhost:5000/api/medicaments');
+    const data = await res.json();
+    setmedicaments(data);
+  };
 
   useEffect(() => {
-    fetchUsers();
+    fetchMedicament();
   }, []);
   return (
     <BrowserRouter>
@@ -52,6 +59,7 @@ const HomeMA = () => {
             <Routes>
             <Route path="/" element={<DashBord />}/>
             <Route path="/users" element={<Users users={users} refreshUsers={fetchUsers} />}/>
+            <Route path="/medicament" element={<Medicament medicaments={medicaments} refreshMedicament={fetchMedicament}/>}/>
             </Routes>
             
             

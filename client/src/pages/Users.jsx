@@ -10,7 +10,7 @@ import Select, { components } from "react-select";
 
 const Users = ({ users, refreshUsers }) => {
   const [filterText, setFilterText] = useState("");
-  const [copied, setCopied] = useState(false);
+ 
   const [formData, setFormData] = useState({
     role: '',
     nom: '',
@@ -135,23 +135,7 @@ const Users = ({ users, refreshUsers }) => {
     doc.save("utilisateurs.pdf");
   };
 
-  // Imprimer (ouvre une fenêtre d'impression)
-
-  const handlePrintSafe = () => {
-    if (!tableRef.current) {
-      alert("Table reference not ready");
-      return;
-    }
-    handlePrint();
-  };
-  const handlePrint = useReactToPrint({
-    content: () => tableRef.current,
-    onBeforeGetContent: () => {
-      return new Promise((resolve) => {
-        setTimeout(resolve, 500);
-      });
-    },
-  });
+  
 
   const handleDelete = async (id) => {
     if (!window.confirm("Supprimer cet utilisateur ?")) return;
@@ -632,7 +616,7 @@ const Users = ({ users, refreshUsers }) => {
                       className="btn btn-success mx-2"
                       data-toggle="modal"
                       data-target=".default-example-modal-right"
-                      onClick={handlePrintSafe}
+                     
                     >
                       Nouveau Utilisateur
                     </button>
