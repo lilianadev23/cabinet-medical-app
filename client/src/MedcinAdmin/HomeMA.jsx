@@ -33,6 +33,7 @@ const HomeMA = () => {
   };
 
   useEffect(() => {
+    fetchUsers();
     fetchMedicament();
   }, []);
   return (

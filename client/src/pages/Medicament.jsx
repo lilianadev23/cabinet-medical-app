@@ -1,7 +1,9 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
+import axios from "axios";
 import DataTable from "react-data-table-component";
+import ModalMedicament from "../components/ModalMedicament";
 
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
@@ -9,72 +11,12 @@ import "jspdf-autotable";
 import Select, { components } from "react-select";
 
 const Medicament = ({ medicaments, refreshMedicament }) => {
-    const [filterText, setFilterText] = useState("");
+  const [showFormModal, setShowFormModal] = useState(false);
+  const [currentMedicament, setCurrentMedicament] = useState(null);
+  const [filterText, setFilterText] = useState("");
  
-  const [formData, setFormData] = useState({
-    codecip: '',
-    nomcommercial: ''
-  });
 
   
- 
-  const tableRef = useRef(null);
-
-  // Filtrer les données
-  const filteredItems = medicaments.filter(
-    (item) =>
-      item.codecip.toLowerCase().includes(filterText.toLowerCase()) ||
-      item.nomcommercial.toLowerCase().includes(filterText.toLowerCase())
-  );
- 
-  
-  
-  // Export Excel
-  const exportExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(filteredItems);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Utilisateurs");
-    XLSX.writeFile(workbook, "utilisateurs.xlsx");
-  };
-
-  const exportPDF = () => {
-    const doc = new jsPDF();
-    doc.text("Liste des utilisateurs", 14, 20);
-
-    const tableColumn = columns.map((col) => col.name);
-    const tableRows = filteredItems.map((item) => [
-      item.nom,
-      item.email,
-      item.role,
-    ]);
-
-    doc.autoTable({
-      head: [tableColumn],
-      body: tableRows,
-      startY: 30,
-    });
-
-    doc.save("utilisateurs.pdf");
-  };
-
-  
-
-  const handleDelete = async (id) => {
-    if (!window.confirm("Supprimer cet utilisateur ?")) return;
-
-    const res = await fetch(`http://localhost:5000/api/users/${id}`, {
-      method: "DELETE",
-    });
-
-    if (res.ok) {
-      alert("Utilisateur supprimé");
-      refreshMedicament();
-      if (editingUser && editingUser._id === id) setEditingUser(null);
-    } else {
-      alert("Erreur suppression");
-    }
-  };
-
   const allColumns = [
     {
       name: "codecip",
@@ -105,28 +47,15 @@ const Medicament = ({ medicaments, refreshMedicament }) => {
           >
             <i className="fal fa-times" />
           </button>
-          <div className="dropdown d-inline-block dropleft ">
-            <button
-              href="#"
-              className="btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0"
-              data-toggle="dropdown"
-              aria-expanded="true"
-              title="Plus options"
-             
-            >
-              <i className="fal fa-ellipsis-v" />
-            </button>
-            <div className="dropdown-menu">
-              <button className="dropdown-item" data-toggle="modal"
-                      data-target=".default-example-modal-right"
-              onClick={() => handleEdit(row)}>
-                Modifier
-              </button>
-              <a className="dropdown-item" href="javascript:void(0);">
-                Changer Statuts
-              </a>
-            </div>
-          </div>
+          <button
+            
+            className="btn btn-sm btn-icon btn-outline-success rounded-circle mr-1"
+            title="Modifier"
+            onClick={() => openFormModal(row)}
+          >
+            <i className="fal fa-pen" />
+          </button>
+         
         </div>
       ),
       ignoreRowClick: true,
@@ -134,43 +63,50 @@ const Medicament = ({ medicaments, refreshMedicament }) => {
       button: true,
     },
   ];
-  const handleEdit = (user) => {
-    console.log(user) 
+ 
+
+
+  // Filtrer les données
+  const filteredItems = medicaments.filter(
+    (item) =>
+      item.codecip.toLowerCase().includes(filterText.toLowerCase()) ||
+      item.nomcommercial.toLowerCase().includes(filterText.toLowerCase())
+  );
+ 
   
-      setFormData({
-        role: user.role,
-        nom: user.nom,
-        prenom: user.prenom,
-        email: user.email,
-        telephone: user.telephone,
-        adresse: user.adresse,
-        CIN: user.CIN,
-        dateNaissance: user.dateNaissance,
-        sexe: user.sexe,
-        motdepasse: user.motdepasse,
-        statut: user.statut, 
-        cabinet : user.cabinet, 
-        dateDebut : user.dateDebut,
-        specialite : user.specialite, 
-        dateEmbauche : user.dateEmbauche,
-        niveauEtude : user.niveauEtude,
-        numCompteBancaire : user.numCompteBancaire,
-       numCnss : user.numCnss,
-       TypeDeContrat : user.TypeDeContrat,
-       salaire : user.salaire,
-       NumeroDeDossier : user.NumeroDeDossier,
-     mutuelle : user.mutuelle,
-      NumeroDeSecuriteSociale : user.NumeroDeSecuriteSociale,
-      Profession : user.Profession,
-     GroupeSanguin : user.GroupeSanguin,
-      MedecinTraitant : user.MedecinTraitant,
-      AllergiesConnues : user.AllergiesConnues,
-      PathologiesChroniques : user.PathologiesChroniques,   
-        
-      });
-    
-     
+  
+  // Export Excel
+  const exportExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(filteredItems);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Utilisateurs");
+    XLSX.writeFile(workbook, "utilisateurs.xlsx");
   };
+
+  const exportPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Liste des médicaments", 14, 20);
+
+    const tableColumn = allColumns.map((col) => col.name);
+    const tableRows = filteredItems.map((item) => [
+      item.codecip,
+      item.nomcommercial,
+     
+    ]);
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 30,
+    });
+
+    doc.save("utilisateurs.pdf");
+  };
+
+  
+
+  
+  
 
   const customStyles = {
     table: {
@@ -328,40 +264,47 @@ const selectOptions = allColumns.map((col) => ({
     },
   };
   
-  const handleChangeadd = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+ 
 
-  const handleSubmit = async e => {
-    e.preventDefault();
 
-    const payload = {      
-        codecip: formData.codecip,
-        nomcommercial: formData.nomcommercial    
-    };
+
+
+
+// Crud
+const openFormModal = (medicament = null) => {
+  setCurrentMedicament(medicament); // null si création, objet si édition
+  setShowFormModal(true);
+};
+
+const closeFormModal = () => {
+  setShowFormModal(false);
+  setCurrentMedicament(null);
+};
 
   
 
-    const res = await fetch('http://localhost:5000/api/medicaments', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const resText = await res.text();
-    console.error('Erreur serveur :', res.status, resText);
-    if (res.ok) {
-      alert('Médicament ajouter avec success !');
-      setFormData({
-        codecip: '',
-        nomcommercial: ''
-      });
-    
-     
-      
+
+const handleDelete = async (id) => {
+  if (!window.confirm("Supprimer ce médicament ?")) return;
+
+  try {
+    const res = await axios.delete(`http://localhost:5000/api/medicaments/${id}`);
+
+    if (res.status === 200 || res.status === 204) {
+      alert("Médicament supprimé avec succès !");
+      refreshMedicament(); // Fonction à appeler pour recharger la liste
+      if (currentMedicament && currentMedicament.id === id) {
+        setCurrentMedicament(null); // Réinitialiser si c’était en cours d'édition
+      }
     } else {
-      alert('Erreur création Médicament');
+      alert("Erreur lors de la suppression du médicament.");
     }
-  };
+  } catch (error) {
+    console.error("Erreur suppression :", error);
+    alert("Erreur réseau ou serveur lors de la suppression.");
+  }
+};
+
   return (
     <div>
       &lt;&gt;
@@ -382,14 +325,10 @@ const selectOptions = allColumns.map((col) => ({
           <sup className="badge badge-danger fw-500">Privée</sup>
           <small></small>
         </h1>
-        <div className="subheader-block">Right content of header</div>
+        <div className="subheader-block"></div>
       </div>
-      <div className="alert alert-primary">
-        
+      <div className="alert alert-primary">   
           
-          
-              
-              
              
               <div className="row w-100">
                   <div className="col-lg-4 col-sm-12 d-flex justify-content-center align-items-center">
@@ -419,11 +358,10 @@ const selectOptions = allColumns.map((col) => ({
                     
                     <button
                       className="btn btn-success mx-2"
-                      data-toggle="modal"
-                      data-target=".default-example-modal-right"
+                      onClick={openFormModal}
                      
                     >
-                      Nouveau Utilisateur
+                      Nouveau Médicament
                     </button>
                   </div>
                   <div className="col-lg-4 col-sm-6">
@@ -516,7 +454,7 @@ const selectOptions = allColumns.map((col) => ({
                 
                
                 <div
-                  ref={tableRef}
+                 
                   style={{
                     width: "100% !important",
                     overflowX: "auto !important",
@@ -544,109 +482,17 @@ const selectOptions = allColumns.map((col) => ({
                     }}
                     noDataComponent="Aucun utilisateur à afficher"
                   />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* Modal Right Transparent*/}
+                    {/* Modal Right Transparent*/}
       {/* Modal Right */}
-      <div
-        className="modal fade default-example-modal-right"
-        tabIndex={-1}
-        role="dialog"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-right">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title h4">Formulaire Médicaments :</h5>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">
-                  <i className="fal fa-times" />
-                </span>
-              </button>
-            </div>
-            <form onSubmit={handleSubmit} >
-            <div className="modal-body">
-              <div className="card mb-5">
-                <div className="card-body p-3">
-                 
-
-                  <div className="form-group">
-                    <label className="form-label" htmlFor="basic-addon1">
-                    Code CIP :
-                    </label>
-                    <div className="input-group">
-                      <div className="input-group-prepend">
-                        <span className="input-group-text">@</span>
-                      </div>
-                      <input
-                        type="text"
-                        id="basic-addon1"
-                        className="form-control"
-                        placeholder="Code CIP"
-                        aria-label="Code Cip"
-                        aria-describedby="basic-addon1"
-                        name="codecip" 
-                        value={formData.codecip} 
-                        onChange={handleChangeadd}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label" htmlFor="basic-addon1">
-                    Nom Commercial :
-                    </label>
-                    <div className="input-group">
-                      <div className="input-group-prepend">
-                        <span className="input-group-text">@</span>
-                      </div>
-                      <input
-                        type="text"
-                        id="basic-addon1"
-                        className="form-control"
-                        placeholder="Nom Commercial"
-                        aria-label="nomcommercial"
-                        aria-describedby="basic-addon1"
-                        name="nomcommercial" 
-                        value={formData.nomcommercial} 
-                        onChange={handleChangeadd}
-                      />
-                    </div>
-                  </div>           
-        
+      <ModalMedicament show={showFormModal} Onsave={refreshMedicament} onClose={closeFormModal} medicamentToEdit={currentMedicament} />
+      {/* Modal Left Transparent*/}
                 </div>
               </div>
-            
-             
-              
-              
             </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-dismiss="modal"
-              >
-                Close
-              </button>
-              <button  type="submit" className="btn btn-primary">
-                Save changes
-              </button>
-            </div>
-            </form>
           </div>
         </div>
       </div>
-      {/* Modal Left Transparent*/}
+    
     </div>
   )
 }
