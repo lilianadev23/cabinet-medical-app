@@ -130,6 +130,14 @@ const NavBar = () => {
             </span>
           </a>
         </li>
+        <li>
+          <Link to="/salle">
+            <i class="fa-regular fa-door-open"></i>
+            <span className="nav-link-text" data-i18n="nav.salle">
+              Salles
+            </span>
+          </Link>
+        </li>
         <li className="nav-title">Planification & Facturation</li>
         <li>
           <a

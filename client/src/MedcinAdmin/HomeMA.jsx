@@ -11,7 +11,7 @@ import MainPage from '../components/MainPage'
 import FooterPage from '../components/FooterPage'
 import Shortcuts from '../components/Shortcuts'
 import ColorProfile from '../components/ColorProfile'
-
+import Salle from "../pages/Salle";
 import QuickMenu from '../components/QuickMenu'
 import Messenger from '../components/Messenger'
 import PageSettings from '../components/PageSettings'
@@ -20,6 +20,7 @@ import DashBord from '../components/DashBord'
 const HomeMA = () => {
   const [users, setUsers] = useState([]);
   const [medicaments, setmedicaments] = useState([]);
+  const [salles, setSalles] = useState([]); 
 
   const fetchUsers = async () => {
     const res = await fetch('http://localhost:5000/api/users');
@@ -31,10 +32,23 @@ const HomeMA = () => {
     const data = await res.json();
     setmedicaments(data);
   };
-
+  const fetchSalles = async () => {
+    try {
+      const res = await fetch('http://localhost:5000/api/salles');
+      if (!res.ok) {
+        throw new Error(`Erreur HTTP: ${res.status}`);
+      }
+      const data = await res.json();
+      setSalles(data);
+    } catch (error) {
+      console.error("Erreur lors du chargement des salles:", error);
+      setSalles([]); 
+    }
+  };
   useEffect(() => {
     fetchUsers();
     fetchMedicament();
+    fetchSalles();
   }, []);
   return (
     <BrowserRouter>
@@ -61,6 +75,7 @@ const HomeMA = () => {
             <Route path="/" element={<DashBord />}/>
             <Route path="/users" element={<Users users={users} refreshUsers={fetchUsers} />}/>
             <Route path="/medicament" element={<Medicament medicaments={medicaments} refreshMedicament={fetchMedicament}/>}/>
+             <Route path="/salle" element={<Salle salles={salles} refreshSalle={fetchSalles} />}/>
             </Routes>
             
             
