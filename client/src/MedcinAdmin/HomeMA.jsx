@@ -16,11 +16,24 @@ import QuickMenu from '../components/QuickMenu'
 import Messenger from '../components/Messenger'
 import PageSettings from '../components/PageSettings'
 import DashBord from '../components/DashBord'
+import RendezVous from '../pages/RendezVous'
+
 
 const HomeMA = () => {
   const [users, setUsers] = useState([]);
   const [medicaments, setmedicaments] = useState([]);
-
+  const [salles, setsalles] = useState([]);
+  const [rdv, setrdv] = useState([]);
+  const fetchRdv = async () => {
+    const res = await fetch('http://localhost:5000/api/rendezVous');
+    const data = await res.json();
+    setrdv(data);
+  };
+  const fetchSalle = async () => {
+    const res = await fetch('http://localhost:5000/api/salles');
+    const data = await res.json();
+    setsalles(data);
+  };
   const fetchUsers = async () => {
     const res = await fetch('http://localhost:5000/api/users');
     const data = await res.json();
@@ -35,6 +48,8 @@ const HomeMA = () => {
   useEffect(() => {
     fetchUsers();
     fetchMedicament();
+    fetchSalle();
+    fetchRdv();
   }, []);
   return (
     <BrowserRouter>
@@ -61,6 +76,10 @@ const HomeMA = () => {
             <Route path="/" element={<DashBord />}/>
             <Route path="/users" element={<Users users={users} refreshUsers={fetchUsers} />}/>
             <Route path="/medicament" element={<Medicament medicaments={medicaments} refreshMedicament={fetchMedicament}/>}/>
+            <Route path="/rendezvous" element={<RendezVous users={users} salles={salles} rdv={rdv} fetchRdv={fetchRdv}/>}/>
+           
+            
+            
             </Routes>
             
             

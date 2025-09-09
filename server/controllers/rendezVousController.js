@@ -1,6 +1,7 @@
 const RendezVous = require('../models/RendezVous');
 
 exports.create = async (req, res) => {
+  console.log("Requête reçue :", req.body); 
   try {
     const data = await RendezVous.create(req.body);
     res.status(201).json(data);

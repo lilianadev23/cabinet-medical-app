@@ -132,16 +132,12 @@ const NavBar = () => {
         </li>
         <li className="nav-title">Planification & Facturation</li>
         <li>
-          <a
-            href="#"
-            title="Statistics"
-            data-filter-tags="statistics chart graphs"
-          >
+        <Link to="/rendezvous">
             <i className="fal fa-chart-pie" />
             <span className="nav-link-text" data-i18n="nav.statistics">
               Rendez-vous
             </span>
-          </a>
+          </Link>
         </li>
         <li>
           <a href="#" title="Plugins" data-filter-tags="plugins">

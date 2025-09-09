@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const RendezVousSchema = new Schema({
-  dateHeure: { type: Date, required: true },
+  dateRDV: { type: Date, required: true },
+  heureRDV: { type: String, required: true },
   patient: { type: Schema.Types.ObjectId, ref: 'User', required: true }, 
   medecin: { type: Schema.Types.ObjectId, ref: 'User', required: true }, 
   salle: { type: Schema.Types.ObjectId, ref: 'Salle' },
