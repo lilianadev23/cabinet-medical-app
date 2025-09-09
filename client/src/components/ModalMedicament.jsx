@@ -110,7 +110,7 @@ const ModalMedicament = ({ show, onClose,Onsave, medicamentToEdit }) => {
               </div>
 
               <div className="form-group">
-                <label>Nom Commercial :</label>
+                <label>Nom Commercial:</label>
                 <div className="input-group">
                   <div className="input-group-prepend">
                     <span className="input-group-text">@</span>
