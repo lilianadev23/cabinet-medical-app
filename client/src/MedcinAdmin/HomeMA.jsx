@@ -18,7 +18,7 @@ import PageSettings from '../components/PageSettings'
 import DashBord from '../components/DashBord'
 import RendezVous from '../pages/RendezVous'
 
-
+import Login from '../pages/Login'
 const HomeMA = () => {
   const [users, setUsers] = useState([]);
   const [medicaments, setmedicaments] = useState([]);
@@ -51,29 +51,36 @@ const HomeMA = () => {
     fetchSalle();
     fetchRdv();
   }, []);
+  const [connected,setconnected]=useState(false)
   return (
+
     <BrowserRouter>
     <div className="mod-bg-1 ">
       <div className="page-wrapper">
         <div className="page-inner">
           {/* BEGIN Left Aside */}
           <aside className="page-sidebar">
-          <NavHeader />
-          <NavBar />
+          
+          {connected ? <NavHeader />:null}
+          {connected ? <NavBar />:null}
+          
           <NavFooter />
           </aside>
           {/* END Left Aside */}
           {/* BEGIN Page Content Wrapper */}
           <div className="page-content-wrapper">
             {/* BEGIN Page Header */}
-            <Header />
+            
+            {connected ? <Header />:null}
             {/* END Page Header */}
 
             {/* BEGIN Page Content */}
             <main id="js-page-content" role="main" className="page-content">
          
             <Routes>
-            <Route path="/" element={<DashBord />}/>
+            <Route path="/" element={<Login connected={connected} setconnected={setconnected} />}/>
+            <Route path="/home" element={<DashBord />}/>
+           
             <Route path="/users" element={<Users users={users} refreshUsers={fetchUsers} />}/>
             <Route path="/medicament" element={<Medicament medicaments={medicaments} refreshMedicament={fetchMedicament}/>}/>
             <Route path="/rendezvous" element={<RendezVous users={users} salles={salles} rdv={rdv} fetchRdv={fetchRdv}/>}/>
@@ -129,6 +136,7 @@ const HomeMA = () => {
       <PageSettings />
       {/* END Page Settings */}
     </div>
+    
     </BrowserRouter>
   );
 };

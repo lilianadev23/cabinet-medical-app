@@ -14,7 +14,7 @@ exports.getAllUsers = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
+const bcrypt = require('bcryptjs');
 exports.getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).exec();
@@ -111,7 +111,7 @@ exports.createUser = async (req, res) => {
       default:
         return res.status(400).json({ message: "Rôle invalide" });
     }
-
+    user.motdepasse = await bcrypt.hash(user.motdepasse, 10);
     await user.save();
     res.status(201).json(user);
   } catch (error) {

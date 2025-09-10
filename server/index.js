@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -12,9 +13,10 @@ const consultationRoutes = require('./routes/consultation');
 const ordonnanceRoutes = require('./routes/ordonnance');
 const ligneOrdonnanceRoutes = require('./routes/ligneOrdonnance');
 const paiementRoutes = require('./routes/paiement');
-
+const authRoutes = require('./routes/auth'); // ajuste le chemin
 const app = express();
 const PORT = process.env.PORT || 5000;
+
 
 app.use(cors({
   origin: 'http://localhost:5173', // React dev server
@@ -44,7 +46,7 @@ app.use('/api/consultations', consultationRoutes);
 app.use('/api/ordonnances',ordonnanceRoutes);
 app.use('/api/lignesordonnances',ligneOrdonnanceRoutes);
 app.use('/api/paiements', paiementRoutes);
-
+app.use('/api/auth', authRoutes);
 
 app.listen(PORT, () => {
   console.log(` Serveur lancé sur le port ${PORT}`);
